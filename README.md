@@ -21,7 +21,8 @@ In this table is shortly described each process:
 Technical details:
 
 5.1	Cmd_Create_LogDir
-Un semplice command per la generazione del folder di log relativa al run corrente, tutti i run che si diversificano per RFC ed ambiente di rilascio avranno una cartella di log dedicata
+A simple command to crate a log directory, specific for the release environment and the realease code
+
 5.2	CreateBackbone.sh
 Una shell col compito di generare il folder relativo il pacchetto di rilascio e tutte le sottocartelle associate. Inoltre genererà le shell di pmrep_import_root.sh e update_return_codes.sh. La naming del pacchetto segue lo standard BPER:
 
@@ -36,8 +37,6 @@ Inoltre, partendo dal folder principale, i subfolder generati rispetteranno le a
 •	./<RFC>/pre script DB
 •	./ORACLE/DEPLOY
 •	./ORACLE/SCRIPT
-
-Script:
  
 5.3	PackageManager.py
 Ha lo scopo di ricevere le tabelle RDL oggetto del rilascio, e dalla loro naming ricavarne:
@@ -45,9 +44,6 @@ Ha lo scopo di ricevere le tabelle RDL oggetto del rilascio, e dalla loro naming
 -	Le sottoaree coinvolte 
 -	Richiamare lo script WriteManifest.py
 -	Richiamare lo script WritePmrep_import.py
--	
-Script:
-
  
 5.3.1	WriteManifest.py
 Ha come scopo la generazione del PackageManifest.xml, un catalogo di tutti gli oggetti contenuti all’ interno del pacchetto da installare nel momento del rilascio.
@@ -80,12 +76,8 @@ Terminate tutte le iterazioni scriverà su file:
 -	Righe di chiusura del file
 
 
-Script:
- 
 5.3.2	WritePmrep_import.py
 Ha come scopo la generazione del file pmrep_import, contenente tutti i comandi di import dei Worfklow presenti nel pacchetto di rilascio. Lo script si limita ad iterare per tutte le sottoaree e generare di conseguenza tutti i comandi di import per ciascun Workflow associato. Al termine di questa operazione, se necessario genera un comando per l’import del WF_IL_000_FILE_MANAGER
-
-Script:
  
 5.4	FillPackage.sh
 Script col compito di leggere il file PackageManifest.xml, e per ogni elemento contenuto ricercarne la posizione e copiarlo all’interno del pacchetto, sotto il subfolder /generico, nel dettaglio:
@@ -106,8 +98,6 @@ Nel caso di un rilascio in PROD:
 -	ETLDWH9_TEST  ETLDWH9_PROD
 -	DW_ORACLE_EDW_DWETL_STND  DW_ETL_X_ORA_EDWP_DWETL_STND
 
-Script:
-
  
 5.5	GenerateDeploy.sh
 Shell col compito di leggere gli script Oracle depositati nel folder dedicato, spostarli nel pacchetto di rilascio e generare il file di Deploy.sql:
@@ -115,7 +105,5 @@ Shell col compito di leggere gli script Oracle depositati nel folder dedicato, s
 Folder dedicato: \\infadwhs.gbbper.priv\infa_shared\DGOV\Script\UTILITY\PackageGenerator\ORACLE\<RFC>
 Folder Ouptut script: \\infadwhs.gbbper.priv\infa_shared\DGOV\Script\UTILITY\PackageGenerator\<Nome  Pacchetto>\ORACLE\SCRIPT
 Folder file di Deploy.sql: \\infadwhs.gbbper.priv\infa_shared\DGOV\Script\UTILITY\PackageGenerator\<Nome  Pacchetto>\ORACLE\DEPLOY
-
-Script:![image](https://github.com/Riccardo-Cpt/PackageGenerator/assets/61077368/819694bc-7661-4529-85d3-50ad66c76dfc)
 
  
