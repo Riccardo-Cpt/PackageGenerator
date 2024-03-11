@@ -14,5 +14,5 @@ The workflow follows the following architecture:
 
 ![image](https://github.com/Riccardo-Cpt/PackageGenerator/assets/61077368/ebcb0c3a-ab05-4b09-84b0-2dd02665741c)
 
-In thi table is shortly described each process:
+In this table is shortly described each process:
 ![image](https://github.com/Riccardo-Cpt/PackageGenerator/assets/61077368/197f47e9-819c-43bc-a0e8-b822f27fd919)
