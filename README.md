@@ -26,15 +26,15 @@ A simple command to crate a log directory, specific for the release environment 
 5.2	CreateBackbone.sh
 Shell aiming to create the release Package main folder and subfolders. Additionally, it writes two other shells pmrep_import_root.sh and update_return_codes.sh (they remain always the same in every release). The package name has a standard naming:
 
-Rilascio_<release environment>_RFC_<RFC code>_<release date>
+Rilascio_[release environment]_RFC_[RFC code]_[release date]
 
 In addition, from the main folder, the generated subfolder will follows the paths:
 
--	./<RFC>/generico
--	./<RFC>/post script
--	./<RFC>/post script DB
--	./<RFC>/pre script
--	./<RFC>/pre script DB
+-	./[RFC]/generico
+-	./[RFC]/post script
+-	./[RFC]/post script DB
+-	./[RFC]/pre script
+-	./[RFC code]/pre script DB
 -	./ORACLE/DEPLOY
 -	./ORACLE/SCRIPT
  
@@ -90,10 +90,6 @@ It reads each object included in PackageManifest.xml, for each element it search
 Eventually, file pointings are modified, depending on the release environment
  
 5.5	GenerateDeploy.sh
-Shell col compito di leggere gli script Oracle depositati nel folder dedicato, spostarli nel pacchetto di rilascio e generare il file di Deploy.sql:
-
-Folder dedicato: \\infadwhs.gbbper.priv\infa_shared\DGOV\Script\UTILITY\PackageGenerator\ORACLE\<RFC>
-Folder Ouptut script: \\infadwhs.gbbper.priv\infa_shared\DGOV\Script\UTILITY\PackageGenerator\<Nome  Pacchetto>\ORACLE\SCRIPT
-Folder file di Deploy.sql: \\infadwhs.gbbper.priv\infa_shared\DGOV\Script\UTILITY\PackageGenerator\<Nome  Pacchetto>\ORACLE\DEPLOY
+This shell reads Oracle script in a user defined folder, move them inside the release package and as result writes the Deploy.sql
 
  
