@@ -30,10 +30,10 @@ Rilascio_[release environment]_RFC_[RFC code]_[release date]
 
 In addition, from the main folder, the generated subfolder will follows the paths:
 
--	./[RFC]/generico
--	./[RFC]/post script
--	./[RFC]/post script DB
--	./[RFC]/pre script
+-	./[RFC code]/generico
+-	./[RFC code]/post script
+-	./[RFC code]/post script DB
+-	./[RFC code]/pre script
 -	./[RFC code]/pre script DB
 -	./ORACLE/DEPLOY
 -	./ORACLE/SCRIPT
