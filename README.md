@@ -24,11 +24,11 @@ Technical details:
 A simple command to crate a log directory, specific for the release environment and the realease code
 
 5.2	CreateBackbone.sh
-Una shell col compito di generare il folder relativo il pacchetto di rilascio e tutte le sottocartelle associate. Inoltre genererà le shell di pmrep_import_root.sh e update_return_codes.sh. La naming del pacchetto segue lo standard BPER:
+Shell aiming to create the release Package main folder and subfolders. Additionally, it writes two other shells pmrep_import_root.sh and update_return_codes.sh (they remain always the same in every release). The package name has a standard naming:
 
-Rilascio_<ambiente rilascio>_RFC_<codice RFC>_<data rilascio>
+Rilascio_<release environment>_RFC_<RFC code>_<release date>
 
-Inoltre, partendo dal folder principale, i subfolder generati rispetteranno le alberature:
+In addition, from the main folder, the generated subfolder will follows the paths:
 
 •	./<RFC>/generico
 •	./<RFC>/post script
@@ -39,65 +39,55 @@ Inoltre, partendo dal folder principale, i subfolder generati rispetteranno le a
 •	./ORACLE/SCRIPT
  
 5.3	PackageManager.py
-Ha lo scopo di ricevere le tabelle RDL oggetto del rilascio, e dalla loro naming ricavarne:
--	Le aree coinvolte 
--	Le sottoaree coinvolte 
--	Richiamare lo script WriteManifest.py
--	Richiamare lo script WritePmrep_import.py
+This script receive release tables, and from their naming calculate:
+-	Involved customer areas 
+-	Involved customer subareas
+-	Launch WriteManifest.py
+- Launch WritePmrep_import.py
  
 5.3.1	WriteManifest.py
-Ha come scopo la generazione del PackageManifest.xml, un catalogo di tutti gli oggetti contenuti all’ interno del pacchetto da installare nel momento del rilascio.
+This script create the PackageManifest.xml file, a catalog of all objects that must be inculuded in the release package and need to be released
 
-Inizia con la scrittura delle componenti fisse:
--	La parte iniziale del file
+It starts writing fixed objects:
+-	File header
 -	Update_return_codes.sh
 -	pmrep_import
 -	pmrep_import_root.sh
--	In caso di flag positivo, l’oggetto relativo al file manager (.xml e .dtd)
+-	In case $$WF_FLAG_FILE_MANAGER = S, objects related to file manager WF (.xml e .dtd)
 
-Dopodichè inizia ad iterare per area corrente, generando i workflow relativi:
--	Gli oggetti relativi ai workflow di semaforo, sia 1_2 che 2_2 (.xml e .dtd)
--	Gli oggetti relativi al workflow TEST_PERMISSION (.xml e .dtd)
--	Gli oggetti relativi al workflow TEST_SOURCE_SYSTEM_FILE (.xml e .dtd)
+Then, it will start iterating for customer areas, creating the objects:
+-	Semaphore Workflows (.xml e .dtd)
+-	TEST_PERMISSION Workflow (.xml e .dtd)
+-	TEST_SOURCE_SYSTEM_FILE workflow (.xml e .dtd)
 
-Poi, inizierà ad iterare per sottoarea, generando:
--	Gli oggetti relativi al WF RDL (.xml e .dtd)
--	I file dei parametri per il workflow RDL (.txt)
--	La shell TEST_CONNECTION (.sh)
--	La shell TEST_CONNECTION_FILE (.sh)
--	La shell TEST_SEMAPHORE_1_2_ (.sh)
--	La shell TEST_SEMAPHORE_2_2_ (.sh)
+A nested iteration is required to work with customer subareas objects:
+-	RDL WF related objects (.xml e .dtd)
+-	Parameter files objects related to WF RDL (.txt)
+-	Shell TEST_CONNECTION (.sh)
+-	Shell TEST_CONNECTION_FILE (.sh)
+-	Shell TEST_SEMAPHORE_1_2_ (.sh)
+-	Shell TEST_SEMAPHORE_2_2_ (.sh)
 
-Infine, itererà per ciascuna tabella appartenente alla sottoarea in esame, generando:
--	La shell TEST_PERMISSION (.sh)
--	La shell TEST_PERMISSION_FILE (.sh)
+A third nested iteration is required to get the tables for each customer subareas. With this information, it generates objects related to:
+-	Shell TEST_PERMISSION (.sh)
+- Shell TEST_PERMISSION_FILE (.sh)
 
-Terminate tutte le iterazioni scriverà su file:
--	Righe di chiusura del file
-
+Finally it writes:
+-	File tail lines
 
 5.3.2	WritePmrep_import.py
-Ha come scopo la generazione del file pmrep_import, contenente tutti i comandi di import dei Worfklow presenti nel pacchetto di rilascio. Lo script si limita ad iterare per tutte le sottoaree e generare di conseguenza tutti i comandi di import per ciascun Workflow associato. Al termine di questa operazione, se necessario genera un comando per l’import del WF_IL_000_FILE_MANAGER
- 
+
+It writes the pmrep_import file, containing all pmprep_import commands. This script iterates each customer subarea writing the command for the related workflow. At the end of these operations, if required, it generates the pmrep_import command related to Wf file manager.
+
 5.4	FillPackage.sh
-Script col compito di leggere il file PackageManifest.xml, e per ogni elemento contenuto ricercarne la posizione e copiarlo all’interno del pacchetto, sotto il subfolder /generico, nel dettaglio:
+It reads each object included in PackageManifest.xml, for each element it searches it inside customer environment and generates a copy inside the release package, under the subfolder ./generico. In details, depending on the object, it follows those procedures:
 
--	Shell: effettua un comando di copy per copiare la shell citata nel Manifest e situata nel folder GFS\infa\infa_shared\DGOV\Script\<area>\ all’interno del folder di rilascio
--	ParamFile: effettua un comando di copy per copiare la shell citata nel Manifest e situata nel folder GFS\infa\infa_shared\DGOV\BWParam\<area>\ all’interno del folder di rilascio
--	Workflow: effettua un export direttamente dal repository di informatica, ricercando per folder associato e nome censito nel Manifest
--	File DTD: questi file vengono generati direttamente all’interno della shell.
+-	Shell: it searches the file inside the environment and with cp command generates a copy inside the package.
+-	ParamFile: it searches the file inside the environment and with cp command generates a copy inside the package.
+-	Workflow: exports the workflow with ObjectExport command from correct informatica repository indicated inside PackageManifest.xml
+-	DTD files: this files are written inside the package.
 
-Terminato il riempimento del subfolder /generico, i seguenti puntamenti presenti nei vari file verranno modificati, a seconda dell’ambiente di rilascio
-
-Nel caso di un rilascio in TEST:
--	ISDQ_DEV  ISDQ_TEST
--	ETLDWH9_SVIL  ETLDWH9_TEST
-
-Nel caso di un rilascio in PROD:
--	ISDQ_TEST  ISDQ_PROD
--	ETLDWH9_TEST  ETLDWH9_PROD
--	DW_ORACLE_EDW_DWETL_STND  DW_ETL_X_ORA_EDWP_DWETL_STND
-
+Eventually, file pointings are modified, depending on the release environment
  
 5.5	GenerateDeploy.sh
 Shell col compito di leggere gli script Oracle depositati nel folder dedicato, spostarli nel pacchetto di rilascio e generare il file di Deploy.sql:
