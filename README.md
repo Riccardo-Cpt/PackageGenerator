@@ -30,13 +30,13 @@ Rilascio_<release environment>_RFC_<RFC code>_<release date>
 
 In addition, from the main folder, the generated subfolder will follows the paths:
 
-•	./<RFC>/generico
-•	./<RFC>/post script
-•	./<RFC>/post script DB
-•	./<RFC>/pre script
-•	./<RFC>/pre script DB
-•	./ORACLE/DEPLOY
-•	./ORACLE/SCRIPT
+-	./<RFC>/generico
+-	./<RFC>/post script
+-	./<RFC>/post script DB
+-	./<RFC>/pre script
+-	./<RFC>/pre script DB
+-	./ORACLE/DEPLOY
+-	./ORACLE/SCRIPT
  
 5.3	PackageManager.py
 This script receive release tables, and from their naming calculate:
